@@ -11,7 +11,7 @@ End Type
 Public Function GetAbilityStats(ByVal nNum As Integer, Optional ByVal nValue As Integer, _
     Optional ByRef LV As ListView, Optional ByVal bCalcSpellLevel As Boolean = True, _
     Optional ByVal bPercentColumn As Boolean) As String
-Dim sHeader As String, oLI As ListItem, sTemp As String, sArr() As String, x As Integer
+Dim sHeader As String, oLI As ListItem, sTemp As String, sArr() As String, X As Integer
 Dim sTextblockCasts As String
 On Error GoTo error:
 
@@ -25,15 +25,15 @@ If nNum = 148 And nValue > 0 Then
         GoTo skip_textblock_spells_only:
     Else
         sArr() = Split(sTemp, ":")
-        For x = 0 To UBound(sArr())
-            If Left(sArr(x), 5) = "cast " Then
-                sTemp = PullSpellEQ(False, , (Val(Mid(sArr(x), 6))))
+        For X = 0 To UBound(sArr())
+            If Left(sArr(X), 5) = "cast " Then
+                sTemp = PullSpellEQ(False, , (Val(Mid(sArr(X), 6))))
                 If Not sTextblockCasts = "" Then sTextblockCasts = sTextblockCasts & ", "
                 sTextblockCasts = sTextblockCasts & sTemp
             Else
                 GoTo skip_textblock_spells_only:
             End If
-        Next x
+        Next X
     End If
 End If
 If Not sTextblockCasts = "" Then
@@ -99,21 +99,21 @@ End Function
 
 Public Function ExtractTextCommand(ByVal sWholeString As String) As String
 On Error GoTo error:
-Dim x As Long, sCommand As String, sChar As String
+Dim X As Long, sCommand As String, sChar As String
 
-x = InStr(1, sWholeString, " ") + 1
-If x = 1 Then
+X = InStr(1, sWholeString, " ") + 1
+If X = 1 Then
     ExtractTextCommand = sWholeString
     Exit Function
 End If
 
-Do While x < Len(sWholeString)
-    sChar = Mid(sWholeString, x, 1)
+Do While X < Len(sWholeString)
+    sChar = Mid(sWholeString, X, 1)
     If sChar = "," Then
         If Not sCommand = "" Then Exit Do
     End If
     sCommand = sCommand & sChar
-    x = x + 1
+    X = X + 1
 Loop
 
 If sCommand = "" Then
@@ -129,51 +129,51 @@ error:
 Call HandleError("ExtractTextCommand")
 ExtractTextCommand = sWholeString
 End Function
+
 Public Function ExtractMapRoom(ByVal sExit As String) As RoomExitType
-Dim x As Integer, y As Integer, i As Integer
-
-On Error GoTo error:
-
-ExtractMapRoom.Map = 0
-ExtractMapRoom.Room = 0
-ExtractMapRoom.ExitType = 0
-
-x = InStr(1, sExit, "/")
-Do While x - 1 > 0 'gets where the map number starts
-    Select Case Mid(sExit, x - 1, 1)
-        Case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0":
-            i = x - 1
-        Case Else:
-            Exit Do
-    End Select
-    x = x - 1
-Loop
-
-'For i = 1 To Len(sExit) - 1 'gets where the first number is
-'    Select Case Mid(sExit, i, 1)
-'        Case "1", "2", "3", "4", "5", "6", "7", "8", "9": Exit For
-'    End Select
-'Next
-
-x = InStr(1, sExit, "/")
-If x = 0 Then Exit Function
-If x = Len(sExit) Then Exit Function
-
-ExtractMapRoom.Map = Val(Mid(sExit, i, x - 1))
-
-y = InStr(x, sExit, " ")
-If y = 0 Then
-    ExtractMapRoom.Room = Val(Mid(sExit, x + 1))
-Else
-    ExtractMapRoom.Room = Val(Mid(sExit, x + 1, y - 1))
-    ExtractMapRoom.ExitType = Mid(sExit, y + 1)
-End If
-
-Exit Function
-
+    Dim X As Integer, Y As Integer, i As Integer
+    
+    On Error GoTo error:
+    
+    ExtractMapRoom.Map = 0
+    ExtractMapRoom.Room = 0
+    ExtractMapRoom.ExitType = 0
+    
+    X = InStr(1, sExit, "/")
+    Do While X - 1 > 0 'gets where the map number starts
+        Select Case Mid(sExit, X - 1, 1)
+            Case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0":
+                i = X - 1
+            Case Else:
+                Exit Do
+        End Select
+        X = X - 1
+    Loop
+    
+    'For i = 1 To Len(sExit) - 1 'gets where the first number is
+    '    Select Case Mid(sExit, i, 1)
+    '        Case "1", "2", "3", "4", "5", "6", "7", "8", "9": Exit For
+    '    End Select
+    'Next
+    
+    X = InStr(1, sExit, "/")
+    If X = 0 Then Exit Function
+    If X = Len(sExit) Then Exit Function
+    
+    ExtractMapRoom.Map = Val(Mid(sExit, i, X - 1))
+    
+    Y = InStr(X, sExit, " ")
+    If Y = 0 Then
+        ExtractMapRoom.Room = Val(Mid(sExit, X + 1))
+    Else
+        ExtractMapRoom.Room = Val(Mid(sExit, X + 1, Y - 1))
+        ExtractMapRoom.ExitType = Mid(sExit, Y + 1)
+    End If
+    
+    Exit Function
+    
 error:
-Call HandleError("ExtractMapRoom")
-
+    Call HandleError("ExtractMapRoom")
 End Function
 
 Public Function CalcEncum(ByVal nStrength As Integer, Optional ByVal nEncumBonus As Integer) As Long
@@ -653,17 +653,17 @@ End Function
 
 Public Function GetAbilityList() As Variant()
 On Error GoTo error:
-Dim sArr() As Variant, x As Integer
+Dim sArr() As Variant, X As Integer
 
 ReDim sArr(200)
-For x = 1 To 200
-    sArr(x) = GetAbilityName(x, True)
-    If sArr(x) = "" Or sArr(x) = "Ability " & x Then
-        sArr(x) = "[Ability " & x & "]"
+For X = 1 To 200
+    sArr(X) = GetAbilityName(X, True)
+    If sArr(X) = "" Or sArr(X) = "Ability " & X Then
+        sArr(X) = "[Ability " & X & "]"
     ElseIf Not bHideRecordNumbers Then
-        sArr(x) = sArr(x) & " (" & x & ")"
+        sArr(X) = sArr(X) & " (" & X & ")"
     End If
-Next x
+Next X
 
 out:
 On Error Resume Next
@@ -890,6 +890,24 @@ Select Case nNum
     Case 185: GetAbilityName = "BadAttk"
     Case 186: GetAbilityName = "PerStealth"
     Case 187: GetAbilityName = "Meditate"
+    Case 188: GetAbilityName = "unique pool"
+    Case 189: GetAbilityName = "witchy badge quest"
+    Case 190: GetAbilityName = "nostock"
+    Case 200: GetAbilityName = "Mandos quest"
+    Case 201: GetAbilityName = "Volums quest"
+    Case 1001: GetAbilityName = "grantthievery 39"
+    Case 1002: GetAbilityName = "granttraps    40"
+    Case 1003: GetAbilityName = "grantpicklocks 37"
+    Case 1004: GetAbilityName = "GrantTracking  38"
+    Case 1100: GetAbilityName = "antimagicnotok"
+    Case 1101: GetAbilityName = "MeetsReqToHit"
+    Case 1102: GetAbilityName = "usespell"
+    Case 1103: GetAbilityName = "Shadowrest"
+    Case 1104: GetAbilityName = "alterspellhealing"
+    Case 1105: GetAbilityName = "alterspells"
+    Case 1106: GetAbilityName = "alterspellbuffs"
+    Case 1107: GetAbilityName = "NoAutoLearn"
+    Case 1108: GetAbilityName = "NotForPVP"
     Case Else: GetAbilityName = "Ability " & nNum
 End Select
 
@@ -1134,7 +1152,7 @@ Call HandleError("CalcSpellCasting")
 End Function
 
 Public Function GetEncumPercents(ByVal nTotalEncum As Long) As String
-Dim x As Double
+Dim X As Double
 On Error GoTo error:
 '& "/" & nTotalEncum
 If Not nTotalEncum = 0 Then
@@ -1144,9 +1162,9 @@ If Not nTotalEncum = 0 Then
     
     GetEncumPercents = GetEncumPercents & vbCrLf
     
-    For x = 0.1 To 0.9 Step 0.1
-        GetEncumPercents = GetEncumPercents & vbCrLf & (x * 100) & "% @ " & Fix(nTotalEncum * x) + 1 '& "/" & nTotalEncum
-    Next x
+    For X = 0.1 To 0.9 Step 0.1
+        GetEncumPercents = GetEncumPercents & vbCrLf & (X * 100) & "% @ " & Fix(nTotalEncum * X) + 1 '& "/" & nTotalEncum
+    Next X
 Else
     GetEncumPercents = ""
 End If

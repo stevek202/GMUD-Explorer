@@ -440,25 +440,6 @@ Begin VB.Form frmSwingCalc
          Top             =   480
          Width           =   435
       End
-      Begin VB.Label Label3 
-         Alignment       =   1  'Right Justify
-         AutoSize        =   -1  'True
-         Caption         =   "(Must be < 67% for QnD)"
-         BeginProperty Font 
-            Name            =   "Small Fonts"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   165
-         Left            =   4965
-         TabIndex        =   93
-         Top             =   1440
-         Width           =   1515
-      End
       Begin VB.Label lblSwingDamage 
          Alignment       =   2  'Center
          Caption         =   "NON-Crit Avg Damage through 3 rounds:"
@@ -503,7 +484,7 @@ Begin VB.Form frmSwingCalc
          Height          =   195
          Left            =   5685
          TabIndex        =   68
-         Top             =   1200
+         Top             =   1260
          Width           =   780
       End
       Begin VB.Label lblEnergy 
@@ -1672,235 +1653,239 @@ Call HandleError("cmdPasteMega_Click")
 End Sub
 
 Private Sub Form_Load()
-On Error GoTo error:
-Dim x As Integer, nCombat As Integer
-
-'Set objToolTip = New clsToolTip
-
-cmbCombat.clear
-cmbCombat.AddItem "1 (Poor)"
-cmbCombat.ItemData(cmbCombat.NewIndex) = 1
-cmbCombat.AddItem "2 (Fair)"
-cmbCombat.ItemData(cmbCombat.NewIndex) = 2
-cmbCombat.AddItem "3 (Average)"
-cmbCombat.ItemData(cmbCombat.NewIndex) = 3
-cmbCombat.AddItem "4 (Good)"
-cmbCombat.ItemData(cmbCombat.NewIndex) = 4
-cmbCombat.AddItem "5 (Excellent)"
-cmbCombat.ItemData(cmbCombat.NewIndex) = 5
-
-If frmMain.cmbGlobalClass(0).ListIndex > 0 Then
-    If frmMain.cmbGlobalClass(0).ItemData(frmMain.cmbGlobalClass(0).ListIndex) > 0 Then
-        nCombat = GetClassCombat(frmMain.cmbGlobalClass(0).ItemData(frmMain.cmbGlobalClass(0).ListIndex))
-        For x = 0 To 4
-            If cmbCombat.ItemData(x) = nCombat Then
-                cmbCombat.ListIndex = x
-                Exit For
-            End If
-        Next x
+    On Error GoTo error:
+    Dim x As Integer, nCombat As Integer
+    
+    'Set objToolTip = New clsToolTip
+    
+    cmbCombat.clear
+    cmbCombat.AddItem "1 (Poor)"
+    cmbCombat.ItemData(cmbCombat.NewIndex) = 1
+    cmbCombat.AddItem "2 (Fair)"
+    cmbCombat.ItemData(cmbCombat.NewIndex) = 2
+    cmbCombat.AddItem "3 (Average)"
+    cmbCombat.ItemData(cmbCombat.NewIndex) = 3
+    cmbCombat.AddItem "4 (Good)"
+    cmbCombat.ItemData(cmbCombat.NewIndex) = 4
+    cmbCombat.AddItem "5 (Excellent)"
+    cmbCombat.ItemData(cmbCombat.NewIndex) = 5
+    
+    If frmMain.cmbGlobalClass(0).ListIndex > 0 Then
+        If frmMain.cmbGlobalClass(0).ItemData(frmMain.cmbGlobalClass(0).ListIndex) > 0 Then
+            nCombat = GetClassCombat(frmMain.cmbGlobalClass(0).ItemData(frmMain.cmbGlobalClass(0).ListIndex))
+            For x = 0 To 4
+                If cmbCombat.ItemData(x) = nCombat Then
+                    cmbCombat.ListIndex = x
+                    Exit For
+                End If
+            Next x
+        End If
     End If
-End If
-If cmbCombat.ListIndex < 0 Then cmbCombat.ListIndex = 2
-
-Call LoadWeapons
-
-If Val(frmMain.txtCharStats(3).Text) > 0 Then
-    txtAgility.Text = Val(frmMain.txtCharStats(3).Text)
-End If
-
-If Val(frmMain.txtGlobalLevel(0).Text) > 0 Then
-    txtLevel.Text = Val(frmMain.txtGlobalLevel(0).Text)
-End If
-
-If Val(frmMain.txtCharStats(0).Text) > 0 Then
-    txtStrength.Text = Val(frmMain.txtCharStats(0).Text)
-End If
-
-If Val(frmMain.txtStat(0).Text) > 0 Then
-    txtEncum.Text = Val(frmMain.txtStat(0).Text)
-End If
-
-If Val(frmMain.txtStat(1).Text) > 0 Then
-    txtMaxEncum.Text = Val(frmMain.txtStat(1).Text)
-End If
-
-If nEquippedItem(16) > 0 Then
-    Call GotoWeapon(nEquippedItem(16))
-End If
-
-Exit Sub
+    If cmbCombat.ListIndex < 0 Then cmbCombat.ListIndex = 2
+    
+    Call LoadWeapons
+    
+    If Val(frmMain.txtCharStats(3).Text) > 0 Then
+        txtAgility.Text = Val(frmMain.txtCharStats(3).Text)
+    End If
+    
+    If Val(frmMain.txtGlobalLevel(0).Text) > 0 Then
+        txtLevel.Text = Val(frmMain.txtGlobalLevel(0).Text)
+    End If
+    
+    If Val(frmMain.txtCharStats(0).Text) > 0 Then
+        txtStrength.Text = Val(frmMain.txtCharStats(0).Text)
+    End If
+    
+    If Val(frmMain.txtStat(0).Text) > 0 Then
+        txtEncum.Text = Val(frmMain.txtStat(0).Text)
+    End If
+    
+    If Val(frmMain.txtStat(1).Text) > 0 Then
+        txtMaxEncum.Text = Val(frmMain.txtStat(1).Text)
+    End If
+    
+    If nEquippedItem(16) > 0 Then
+        Call GotoWeapon(nEquippedItem(16))
+    End If
+    
+    Exit Sub
 error:
-Call HandleError
-Resume Next
+    Call HandleError
+    Resume Next
 End Sub
 
 Public Sub GotoWeapon(ByVal nItem As Long)
-Dim x As Integer
-
-For x = 0 To cmbWeapon.ListCount - 1
-    If cmbWeapon.ItemData(x) = nItem Then
-        cmbWeapon.ListIndex = x
-        Exit For
-    End If
-Next x
-
+    Dim x As Integer
+    
+    For x = 0 To cmbWeapon.ListCount - 1
+        If cmbWeapon.ItemData(x) = nItem Then
+            cmbWeapon.ListIndex = x
+            Exit For
+        End If
+    Next x
 End Sub
 
 Private Sub CalcSwings()
-Dim nWeaponSpeed As Currency, nEnergy As Currency, nQnDBonus As Currency
-Dim nTemp As Integer, nSpeed As Integer, x As Integer, i As Integer ', k As Integer, J As Integer
-Dim nEncum As Currency, nSwings As Double, nDamage As Currency
-If tabItems.RecordCount = 0 Then Exit Sub
-If cmbWeapon.ListIndex < 0 Then Exit Sub
-
-tabItems.Index = "pkItems"
-tabItems.Seek "=", cmbWeapon.ItemData(cmbWeapon.ListIndex)
-If tabItems.NoMatch Then
-    tabItems.MoveFirst
-    Exit Sub
-End If
-
-'If the player has the "Slowness" flag on them (which is different, I believe,
-'from the "Slowness" ability), then AdjustSpeedForSlowness is applied to the weapons Speed.
-nWeaponSpeed = tabItems.Fields("Speed")
-If chkSlowness.Value = 1 Then nWeaponSpeed = AdjustSpeedForSlowness(nWeaponSpeed)
-
-'The Speed value of the weapon (either adjusted as above, or as read raw from the item) is
-'passed to CalcEnergyUsedWithEncum (using a previously calculated encumbrance percentage
-'using CalcEncumbrancePercent).
-'
-'CalcEnergyUsedWithEncum handles both the heavy in hands scenario and the issue of
-'encumbrance percentage affecting the actual EU per swing (and in the correct order).
-nEncum = CalcEncumbrancePercent(Val(txtEncum.Text), Val(txtMaxEncum.Text))
-
-nEnergy = CalcEnergyUsedWithEncum(cmbCombat.ItemData(cmbCombat.ListIndex), Val(txtLevel.Text), nWeaponSpeed, _
-    Val(txtAgility.Text), Val(txtStrength.Text), nEncum, tabItems.Fields("StrReq"))
-
-'After this, the calculated EU is passed to AdjustEnergyUsedWithSpeed.
-'So on sped, you'd pass in 85, for slow you'd pass in 125
-If optSpeed(0).Value = True Then 'speed
-    nSpeed = 85
-ElseIf optSpeed(1).Value = True Then 'normal
-    nSpeed = 100
-ElseIf optSpeed(2).Value = True Then 'slow
-    nSpeed = 125
-ElseIf optSpeed(3).Value = True Then 'custom
-    nSpeed = Val(txtSpeed.Text)
-    If nSpeed <= 0 Then
-        txtSpeed.Text = 1
-        nSpeed = 1
-    End If
-Else
-    nSpeed = 100
-End If
-
-nEnergy = AdjustEnergyUsedWithSpeed(nEnergy, nSpeed)
-
-If chkBashing.Value = 1 Then nEnergy = nEnergy * 2
-'Finally, if the weapon is not "heavy in hands", the final EU, AGL, and encumbrance
-'percent can be passed to CalcQuickAndDeadlyBonus to get the Q&D bonus.  And that should do it.
-
-If Not Val(txtStrength.Text) < tabItems.Fields("StrReq") Then
-    nQnDBonus = CalcQuickAndDeadlyBonus(Val(txtAgility.Text), nEnergy, nEncum)
-End If
-If nQnDBonus > 0 Then
-    lblQND.Caption = "QND Crits: " & nQnDBonus
-Else
-    lblQND.Caption = "QND Crits: None"
-End If
-
-'i've also included some helper functions that can be used outside of the usual flow of code
-'to calculate weapon EU, for example AdjustEnergyUsedWithEncum, IsQuickAndDeadly, and CalcEncumbrance.
-
-If nEnergy = 0 Then
-    lblEnergy.Caption = "Energy per swing: 0"
-    lblEnergy.Caption = "Energy per swing: " & nEnergy
-    lblEncum.Caption = "Encumbrance: " & nEncum & "%"
-    lblEncum.Tag = nEncum
-    lblRawSwing.Caption = "Raw swing: " & 0
-    lblRawSwing.Tag = 0
-    txtTrueAVG(6).Text = 0
-
-    For x = 0 To 9
-        lblEU(x).Caption = 0
-        txtSwing(x).Text = 0
-    Next x
+    Dim nWeaponSpeed As Currency, nEnergy As Currency, nQnDBonus As Currency
+    Dim nTemp As Integer, nSpeed As Integer, x As Integer, i As Integer ', k As Integer, J As Integer
+    Dim nEncum As Currency, nSwings As Double, nDamage As Currency
+    If tabItems.RecordCount = 0 Then Exit Sub
+    If cmbWeapon.ListIndex < 0 Then Exit Sub
     
-    Exit Sub
-End If
-
-'SWING CALC
-nSwings = Round((1000 / nEnergy), 4)
-
-lblEnergy.Caption = "Energy per swing: " & nEnergy
-lblEncum.Caption = "Encumbrance: " & nEncum & "%"
-lblEncum.Tag = nEncum
-lblRawSwing.Caption = "Raw swing: " & nSwings
-lblRawSwing.Tag = nSwings
-
-txtTrueAVG(6).Text = nSwings
-
-
-'txtTrueAVG(7).Text = CalcTrueAverage(nSwings, Val(txtTrueAVG(0).Text), Val(txtTrueAVG(1).Text), _
-    Val(txtTrueAVG(2).Text), Val(txtTrueAVG(3).Text), Val(txtTrueAVG(4).Text), Val(txtTrueAVG(5).Text))
-
-'Temp := 1000;
-nTemp = 1000
-If nEnergy <= 0 Then nEnergy = 1
-
-'   Cnt := 1;
-'   repeat
-For x = 0 To 9
-
-'     I := Temp div EU;
-    i = Fix(nTemp \ nEnergy)
-
-'     Temp := (Temp mod EU) + 1000;
-    nTemp = (nTemp Mod nEnergy) + 1000
-    
-'     If (i > 5) Then
-'       I := 5;
-    If (i > 5) Then i = 5
-    
-'     K := 0;
-'     while (K < I) do begin
-'       J := Random(99);
-'       If (J < Crits) Then
-'         { Critical hit }
-'         LWriteLn('|12' + Format(R, [PickHitMsg(@Msg), Random((MaxHit * 4) - (MaxHit * 2)) + (MaxHit * 2)]))
-'       Else
-'         { Normal hit }
-'         LWriteLn('|12' + Format(S, [PickHitMsg(@Msg), Random(MaxHit - MinHit) + MinHit]));
-'       ProcessSpell(Weapon);
-'       Inc(K);
-'     end;
-
-    lblEU(x).Caption = nTemp - 1000
-'     LWrite(Format('|08[|03EU REMAINING|08=|11%-4.4s|08/|03SWINGS|08=|11%d|08/|03ROUND|08=|11%d|08]:|15', [IntToStr(Temp - 1000), K, Cnt]));
-'     case UpCase(ReadKey) of
-'     'Q', 'X', #27: Break;
-'     end;
-'     WriteLn;
-'     Inc(Cnt);
-    txtSwing(x).Text = i
-'   until (False);
-Next x
-
-If Not tabItems.Fields("Number") = cmbWeapon.ItemData(cmbWeapon.ListIndex) Then
     tabItems.Index = "pkItems"
     tabItems.Seek "=", cmbWeapon.ItemData(cmbWeapon.ListIndex)
     If tabItems.NoMatch Then
         tabItems.MoveFirst
         Exit Sub
     End If
-End If
-
-For x = 0 To 2
-    nDamage = nDamage + (((tabItems.Fields("Min") + tabItems.Fields("Max")) / 2) * Val(txtSwing(x).Text))
-Next x
-lblSwingDamage(0).Caption = Round(nDamage / 3, 1)
-
-'If cmbWeapon.ListIndex < cmbWeapon.ListCount - 1 Then cmbWeapon.ListIndex = cmbWeapon.ListIndex + 1
+    
+    'If the player has the "Slowness" flag on them (which is different, I believe,
+    'from the "Slowness" ability), then AdjustSpeedForSlowness is applied to the weapons Speed.
+    nWeaponSpeed = tabItems.Fields("Speed")
+    If chkSlowness.Value = 1 Then nWeaponSpeed = AdjustSpeedForSlowness(nWeaponSpeed)
+    
+    'The Speed value of the weapon (either adjusted as above, or as read raw from the item) is
+    'passed to CalcEnergyUsedWithEncum (using a previously calculated encumbrance percentage
+    'using CalcEncumbrancePercent).
+    '
+    'CalcEnergyUsedWithEncum handles both the heavy in hands scenario and the issue of
+    'encumbrance percentage affecting the actual EU per swing (and in the correct order).
+    nEncum = CalcEncumbrancePercent(Val(txtEncum.Text), Val(txtMaxEncum.Text))
+    
+    nEnergy = CalcEnergyUsedWithEncum(cmbCombat.ItemData(cmbCombat.ListIndex), Val(txtLevel.Text), nWeaponSpeed, _
+        Val(txtAgility.Text), Val(txtStrength.Text), nEncum, tabItems.Fields("StrReq"))
+    
+    'After this, the calculated EU is passed to AdjustEnergyUsedWithSpeed.
+    'So on sped, you'd pass in 85, for slow you'd pass in 125
+    If optSpeed(0).Value = True Then 'speed
+        nSpeed = 85
+    ElseIf optSpeed(1).Value = True Then 'normal
+        nSpeed = 100
+    ElseIf optSpeed(2).Value = True Then 'slow
+        nSpeed = 125
+    ElseIf optSpeed(3).Value = True Then 'custom
+        nSpeed = Val(txtSpeed.Text)
+        If nSpeed <= 0 Then
+            txtSpeed.Text = 1
+            nSpeed = 1
+        End If
+    Else
+        nSpeed = 100
+    End If
+    
+    nEnergy = AdjustEnergyUsedWithSpeed(nEnergy, nSpeed)
+    
+    If chkBashing.Value = 1 Then nEnergy = nEnergy * 2
+    'Finally, if the weapon is not "heavy in hands", the final EU, AGL, and encumbrance
+    'percent can be passed to CalcQuickAndDeadlyBonus to get the Q&D bonus.  And that should do it.
+    
+'    If Not Val(txtStrength.Text) < tabItems.Fields("StrReq") Then
+'        nQnDBonus = CalcQuickAndDeadlyBonus(Val(txtAgility.Text), nEnergy, nEncum)
+'    End If
+    
+    'i've also included some helper functions that can be used outside of the usual flow of code
+    'to calculate weapon EU, for example AdjustEnergyUsedWithEncum, IsQuickAndDeadly, and CalcEncumbrance.
+    
+    If nEnergy = 0 Then
+        lblEnergy.Caption = "Energy per swing: 0"
+        lblEnergy.Caption = "Energy per swing: " & nEnergy
+        lblEncum.Caption = "Encumbrance: " & nEncum & "%"
+        lblEncum.Tag = nEncum
+        lblRawSwing.Caption = "Raw swing: " & 0
+        lblRawSwing.Tag = 0
+        txtTrueAVG(6).Text = 0
+    
+        For x = 0 To 9
+            lblEU(x).Caption = 0
+            txtSwing(x).Text = 0
+        Next x
+        
+        Exit Sub
+    End If
+    
+    'SWING CALC
+    nSwings = Round((1000 / nEnergy), 4)
+    
+    lblEnergy.Caption = "Energy per swing: " & nEnergy
+    lblEncum.Caption = "Encumbrance: " & nEncum & "%"
+    lblEncum.Tag = nEncum
+    lblRawSwing.Caption = "Raw swing: " & nSwings
+    lblRawSwing.Tag = nSwings
+    
+    txtTrueAVG(6).Text = nSwings
+    
+    
+    'txtTrueAVG(7).Text = CalcTrueAverage(nSwings, Val(txtTrueAVG(0).Text), Val(txtTrueAVG(1).Text), _
+        Val(txtTrueAVG(2).Text), Val(txtTrueAVG(3).Text), Val(txtTrueAVG(4).Text), Val(txtTrueAVG(5).Text))
+    
+    'Temp := 1000;
+    nTemp = 1000
+    If nEnergy <= 0 Then nEnergy = 1
+    
+    '   Cnt := 1;
+    '   repeat
+    For x = 0 To 9
+    
+    '     I := Temp div EU;
+        i = Fix(nTemp \ nEnergy)
+    
+    '     Temp := (Temp mod EU) + 1000;
+        nTemp = (nTemp Mod nEnergy) + 1000
+        
+    '     If (i > 5) Then
+    '       I := 5;
+        If (i > 6) Then i = 6
+        
+    '     K := 0;
+    '     while (K < I) do begin
+    '       J := Random(99);
+    '       If (J < Crits) Then
+    '         { Critical hit }
+    '         LWriteLn('|12' + Format(R, [PickHitMsg(@Msg), Random((MaxHit * 4) - (MaxHit * 2)) + (MaxHit * 2)]))
+    '       Else
+    '         { Normal hit }
+    '         LWriteLn('|12' + Format(S, [PickHitMsg(@Msg), Random(MaxHit - MinHit) + MinHit]));
+    '       ProcessSpell(Weapon);
+    '       Inc(K);
+    '     end;
+    
+        lblEU(x).Caption = nTemp - 1000
+    '     LWrite(Format('|08[|03EU REMAINING|08=|11%-4.4s|08/|03SWINGS|08=|11%d|08/|03ROUND|08=|11%d|08]:|15', [IntToStr(Temp - 1000), K, Cnt]));
+    '     case UpCase(ReadKey) of
+    '     'Q', 'X', #27: Break;
+    '     end;
+    '     WriteLn;
+    '     Inc(Cnt);
+        txtSwing(x).Text = i
+    '   until (False);
+    Next x
+    
+    If Not tabItems.Fields("Number") = cmbWeapon.ItemData(cmbWeapon.ListIndex) Then
+        tabItems.Index = "pkItems"
+        tabItems.Seek "=", cmbWeapon.ItemData(cmbWeapon.ListIndex)
+        If tabItems.NoMatch Then
+            tabItems.MoveFirst
+            Exit Sub
+        End If
+    End If
+    
+    Dim remainingEnergy As Double
+    remainingEnergy = (nSwings - 6) * nEnergy
+    nQnDBonus = Fix(remainingEnergy / 40)
+    
+    If nQnDBonus > 0 Then
+        lblQND.Caption = "QND Crits: " & nQnDBonus
+    Else
+        lblQND.Caption = "QND Crits: None"
+    End If
+    
+    For x = 0 To 2
+        nDamage = nDamage + (((tabItems.Fields("Min") + tabItems.Fields("Max")) / 2) * Val(txtSwing(x).Text))
+    Next x
+    lblSwingDamage(0).Caption = Round(nDamage / 3, 1)
+    
+    'If cmbWeapon.ListIndex < cmbWeapon.ListCount - 1 Then cmbWeapon.ListIndex = cmbWeapon.ListIndex + 1
 
 End Sub
 
