@@ -2,6 +2,15 @@
 
 GMUD Explorer is a spin off of MMUD Explorer.  Syntax did a wonderful job with MME, but as GreaterMUD continues to evolve having it's own version of MME provides for more updates that are specific to the GreaterMUD game.
 
+v1.0.3 (03/19/2021)  
+------------------------------------------  
+* Updated Monster Attack Sim to account for GMUD hit % calculations
+
+v1.0.2 (03/19/2021)  
+------------------------------------------  
+* Fixed issue with character bless dropdowns resetting when changing filters on spell list
+* Added spells from usable items to spell list for classes as well as to character bless dropdown
+
 v1.0.1 (03/18/2021)  
 ------------------------------------------  
 * Updated tab index on Character and Equipment tabs
