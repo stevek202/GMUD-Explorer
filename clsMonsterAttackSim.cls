@@ -537,7 +537,7 @@ For nRound = 1 To m_nNumberOfRounds
                             nAttack_AdjSuccessChance = 99
                         End If
                         'PHYSICAL ATTACKS = 9% MIN HIT CHANCE, 99% MAX
-                        If nAttack_AdjSuccessChance < 9 Then nAttack_AdjSuccessChance = 9
+                        If nAttack_AdjSuccessChance < 0 Then nAttack_AdjSuccessChance = 0
                         If nAttack_AdjSuccessChance > 99 Then nAttack_AdjSuccessChance = 99
                     End If
                     
