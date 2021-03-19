@@ -10,3 +10,5 @@ v1.0.1 (03/18/2021)
 * Updated the Bless dropdowns, they're now tied to the global filter and show only spells usable by the chosen class
 * Fixed the room 0/0 bug
 * Added a global ctrl+a to select all from textboxes on frmMain (which is most of the app)
+* Updated CP Calculator to handle increases above 100
+* Updated Accuracy vs AC calculation to account for GMUD 100% miss rate
