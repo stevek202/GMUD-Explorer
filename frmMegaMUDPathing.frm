@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmMegaMUDPath 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "MegaMUD Pathing"
@@ -577,7 +577,7 @@ Resume out:
 End Sub
 Private Sub cmdMapAddMegaCodes_Click()
 On Error GoTo error:
-Dim sText As String, sNewText As String, x As Long, y As Long, nSteps As Long
+Dim sText As String, sNewText As String, X As Long, Y As Long, nSteps As Long
 Dim sFile As String, fso As FileSystemObject, oTS As TextStream, oFile As File, oFolder As Folder
 Dim sLine As String, sArr() As String, oSubFolder As Folder, oSubFolder2 As Folder
 Dim sFileHeader(3) As String, sNeededItem As String, sPathSteps() As String
@@ -638,8 +638,8 @@ ElseIf fso.FileExists("C:\Program Files (x86)\Megamud\Default\Rooms.md") Then
     oComDag.InitDir = "C:\Program Files (x86)\Megamud\Default"
 ElseIf fso.FileExists("C:\Megamud\Default\Rooms.md") Then
     oComDag.InitDir = "C:\Megamud\Default"
-ElseIf fso.FileExists(Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default\Rooms.md") Then
-    oComDag.InitDir = Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default"
+'ElseIf fso.FileExists(Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default\Rooms.md") Then
+'    oComDag.InitDir = Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default"
 Else
     oComDag.InitDir = App.Path
 End If
@@ -655,8 +655,8 @@ sFile = oComDag.FileName
 If Not UCase(Right(sFile, 3)) = ".MD" Then sFile = sFile & ".MD"
 
 If Not fso.FileExists(sFile) Then
-    x = MsgBox("File not found or file open canceled, continue anyway?", vbYesNo + vbQuestion)
-    If Not x = vbYes Then GoTo out:
+    X = MsgBox("File not found or file open canceled, continue anyway?", vbYesNo + vbQuestion)
+    If Not X = vbYes Then GoTo out:
     GoTo skip_room_lookup:
 End If
 
@@ -746,16 +746,16 @@ Call WriteINI("Settings", "MegaMUD_Path_Author", sText)
 sFileHeader(0) = sFileHeader(0) & "[" & sText & "]"
 
 sText = ""
-For x = 0 To 3
-    If Not Trim(sFileHeader(x)) = "" Then
-        sText = sText & sFileHeader(x) & vbCrLf
+For X = 0 To 3
+    If Not Trim(sFileHeader(X)) = "" Then
+        sText = sText & sFileHeader(X) & vbCrLf
     End If
-Next x
-For x = 0 To UBound(sPathSteps())
-    If Not Trim(sPathSteps(x)) = "" Then
-        sText = sText & sPathSteps(x) & vbCrLf
+Next X
+For X = 0 To UBound(sPathSteps())
+    If Not Trim(sPathSteps(X)) = "" Then
+        sText = sText & sPathSteps(X) & vbCrLf
     End If
-Next x
+Next X
 
 MsgBox "We are ready to save the path. It is recommended to save the file *outside* of your megamud install " _
     & "(such as your desktop) and then utilize the Add path feature from the" & vbCrLf _
@@ -777,10 +777,10 @@ oComDag.ShowSave
 If oComDag.FileName = "" Then GoTo out:
 
 If fso.FileExists(oComDag.FileName) Then
-    x = MsgBox("File Exists, Overwrite?", vbQuestion + vbYesNoCancel + vbDefaultButton2)
-    If x = vbCancel Then
+    X = MsgBox("File Exists, Overwrite?", vbQuestion + vbYesNoCancel + vbDefaultButton2)
+    If X = vbCancel Then
         GoTo out:
-    ElseIf x = vbYes Then
+    ElseIf X = vbYes Then
         Call fso.DeleteFile(oComDag.FileName, True)
     Else
         GoTo saveagain:
@@ -882,7 +882,7 @@ End If
 End Sub
 
 Private Sub cmdMove_Click(Index As Integer)
-Dim x As Integer
+Dim X As Integer
 On Error GoTo error:
 
 Select Case Index
@@ -899,15 +899,15 @@ Select Case Index
 End Select
 
 If Index = 10 Then
-    For x = 0 To 10
-        cmdMove(x).Visible = False
-    Next x
+    For X = 0 To 10
+        cmdMove(X).Visible = False
+    Next X
     cmdMove(11).Visible = True
 ElseIf Index = 11 Then
     cmdMove(11).Visible = False
-    For x = 0 To 10
-        cmdMove(x).Visible = True
-    Next x
+    For X = 0 To 10
+        cmdMove(X).Visible = True
+    Next X
 End If
 
 out:
@@ -920,11 +920,11 @@ End Sub
 
 Private Sub cmdResetCurrent_Click()
 On Error GoTo error:
-Dim x As Integer
+Dim X As Integer
 
 If Len(Trim(txtMapMove.Text)) > 0 Then
-    x = MsgBox("Are you sure?", vbQuestion + vbYesNo)
-    If Not x = vbYes Then Exit Sub
+    X = MsgBox("Are you sure?", vbQuestion + vbYesNo)
+    If Not X = vbYes Then Exit Sub
 End If
 
 Call SetCurrentPosition(frmMain.nMapStartMap, frmMain.nMapStartRoom)
@@ -939,11 +939,11 @@ End Sub
 
 Private Sub cmdResetStart_Click()
 On Error GoTo error:
-Dim x As Integer
+Dim X As Integer
 
 If Len(Trim(txtMapMove.Text)) > 0 Then
-    x = MsgBox("Are you sure?  If you have steps in the path the preceed this room then when you add the megamud codes later the wrong starting room codes will be entered.", vbQuestion + vbYesNo)
-    If Not x = vbYes Then Exit Sub
+    X = MsgBox("Are you sure?  If you have steps in the path the preceed this room then when you add the megamud codes later the wrong starting room codes will be entered.", vbQuestion + vbYesNo)
+    If Not X = vbYes Then Exit Sub
 End If
 Call ResetStartingRoom
 
@@ -960,7 +960,7 @@ MsgBox "Note: This simply removes the last line in the box and sets the current 
 End Sub
 
 Private Sub cmdUndoStep_Click()
-Dim sArr() As String, sText As String, x As Integer, nRoom As RoomExitType
+Dim sArr() As String, sText As String, X As Integer, nRoom As RoomExitType
 On Error GoTo error:
 
 If Right(txtMapMove.Text, 2) = vbCrLf Then txtMapMove.Text = Left(txtMapMove.Text, Len(txtMapMove.Text) - 2)
@@ -969,9 +969,9 @@ If Not Trim(txtMapMove.Text) = "" Then
     txtMapMove.Text = Replace(Trim(txtMapMove.Text), vbCrLf & vbCrLf, vbCrLf)
     sArr() = Split(txtMapMove.Text, vbCrLf)
     If IsDimmed(sArr()) Then
-        For x = 0 To UBound(sArr()) - 1
-            sText = sText & sArr(x) & vbCrLf
-        Next x
+        For X = 0 To UBound(sArr()) - 1
+            sText = sText & sArr(X) & vbCrLf
+        Next X
         If Len(sText) > 1 Then sText = Left(sText, Len(sText) - 2)
         txtMapMove.Text = sText
         
@@ -1074,7 +1074,7 @@ Resume out:
 End Sub
 
 Private Sub txtMapMove_KeyPress(KeyAscii As Integer)
-Dim sLook As String, RoomExit As RoomExitType, x As Integer
+Dim sLook As String, RoomExit As RoomExitType, X As Integer
 Dim nExitType As Integer, nRecNum As Long, sRoomName As String
 Dim nTest As Integer, sActions(9) As String, sTemp As String
 Dim sCurrentRoomMegaMudCode As String, nRoomFlags As Long, sRoomFlags As String
@@ -1228,16 +1228,16 @@ Select Case nExitType
         If InStr(1, LCase(RoomExit.ExitType), "action") > 0 Then
             nTest = ExtractValueFromString(RoomExit.ExitType, "needs ")
             If nTest > 0 Then
-                For x = 1 To nTest
-                    sActions(x) = InputBox("Enter action # " & x & vbCrLf & vbCrLf _
+                For X = 1 To nTest
+                    sActions(X) = InputBox("Enter action # " & X & vbCrLf & vbCrLf _
                         & "If the action is not entered in this room, type a zero (0)." & vbCrLf _
                         & "To cancel the move and look up the command press cancel.")
-                    If sActions(x) = "" Then GoTo out:
-                    If sActions(x) = "0" Then
-                        sActions(x) = ""
+                    If sActions(X) = "" Then GoTo out:
+                    If sActions(X) = "0" Then
+                        sActions(X) = ""
                         GoTo cont
                     End If
-                Next x
+                Next X
 cont:
             Else
                 sLook = sLook & " -- " & RoomExit.ExitType
@@ -1266,12 +1266,12 @@ If Len(sRoomFlags) < 4 Then sRoomFlags = String(4 - Len(sRoomFlags), "0") & sRoo
 txtMapMove.Text = txtMapMove.Text & ":" & sRoomFlags & ":" & sLook
 If Len(sActions(1)) > 0 Then
     txtMapMove.Text = txtMapMove.Text & "["
-    For x = 1 To 9
-        If Len(sActions(x)) > 0 Then
-            If x > 1 Then txtMapMove.Text = txtMapMove.Text & ","
-            txtMapMove.Text = txtMapMove.Text & sActions(x)
+    For X = 1 To 9
+        If Len(sActions(X)) > 0 Then
+            If X > 1 Then txtMapMove.Text = txtMapMove.Text & ","
+            txtMapMove.Text = txtMapMove.Text & sActions(X)
         End If
-    Next x
+    Next X
     txtMapMove.Text = txtMapMove.Text & "]"
 End If
 

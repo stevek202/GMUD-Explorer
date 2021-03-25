@@ -2,6 +2,11 @@
 
 GMUD Explorer is a spin off of MMUD Explorer.  Syntax did a wonderful job with MME, but as GreaterMUD continues to evolve having it's own version of MME provides for more updates that are specific to the GreaterMUD game.
 
+
+v1.0.5 (03/25/2021)  
+------------------------------------------  
+* Removed line in path save that looks for rooms.md based on Environment variable USERPROFILE
+
 v1.0.4 (03/25/2021)  
 ------------------------------------------  
 * Update Monster List View, added new sortable columns for Accuracy (Max), AC/DR, Dodge, Spell Attacks (shows the spell type of attack spells cast by monster, else No)
