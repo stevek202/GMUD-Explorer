@@ -576,263 +576,263 @@ Call HandleError("cmdMapCommand_Click")
 Resume out:
 End Sub
 Private Sub cmdMapAddMegaCodes_Click()
-On Error GoTo error:
-Dim sText As String, sNewText As String, X As Long, Y As Long, nSteps As Long
-Dim sFile As String, fso As FileSystemObject, oTS As TextStream, oFile As File, oFolder As Folder
-Dim sLine As String, sArr() As String, oSubFolder As Folder, oSubFolder2 As Folder
-Dim sFileHeader(3) As String, sNeededItem As String, sPathSteps() As String
-Dim sStartingRoomChecksum As String, sEndingRoomChecksum As String
-Dim sStartRoomName As String, sEndRoomName As String
-Dim sStartRoomCode As String, sEndRoomCode As String
-
-txtMapMove.Text = Replace(txtMapMove.Text, vbCrLf & vbCrLf, vbCrLf)
-
-sText = txtMapMove.Text
-If Len(sText) < 1 Then
-    MsgBox "No text to copy.", vbInformation
-    Exit Sub
-End If
-
-'sText = "[LOOP NAME][AUTHOR]" & vbCrLf _
-    & "[CODE:FROM ROOM GROUP:FROM ROOM NAME]" & vbCrLf _
-    & "[CODE:TO ROOM GROUP:TO ROOM NAME]" & vbCrLf _
-    & "START ROOM CHECKSUM:END ROOM CHECKSUM:" & nSteps & ":-1:0:Needed Items:Path fails:when finished"
-
-sPathSteps() = Split(txtMapMove.Text, vbCrLf)
-If Not IsDimmed(sPathSteps) Then GoTo out:
-
-nSteps = UBound(sPathSteps()) + 1
-
-If Len(sPathSteps(0)) > 2 And Left(sPathSteps(0), 1) = ":" And Right(sPathSteps(0), 1) = ":" Then
-    sNeededItem = Replace(sPathSteps(0), ":", "")
-    sPathSteps(0) = ""
-    nSteps = nSteps - 1
-End If
-
-sStartRoomName = GetRoomName("", nLocalMapStartMap, nLocalMapStartRoom, True)
-sStartingRoomChecksum = Get_MegaMUD_RoomHash(sStartRoomName) & Get_MegaMUD_ExitsCode(nLocalMapStartMap, nLocalMapStartRoom)
-sStartRoomCode = Get_MegaMUD_RoomHash(sStartRoomName) & "9"
-
-sEndRoomName = GetRoomName("", nLastMapRecorded, nLastRoomRecorded, True)
-sEndingRoomChecksum = Get_MegaMUD_RoomHash(sEndRoomName) & Get_MegaMUD_ExitsCode(nLastMapRecorded, nLastRoomRecorded)
-sEndRoomCode = Get_MegaMUD_RoomHash(sEndRoomName) & "9"
-
-sFileHeader(0) = "[][]"
-'sFileHeader(1) = "[FFFF:Custom Paths:" & sStartRoomName
-'sFileHeader(2) = "[FFFF:Custom Paths:" & sEndRoomName
-sFileHeader(3) = sStartingRoomChecksum & ":" & sEndingRoomChecksum & ":" & nSteps & ":-1:0:" & sNeededItem & "::"
-
-MsgBox "On the next screen you will be asked to select the MegaMUD rooms.md database file. " _
-    & "Choose the MAIN rooms.md file (the one under the ""Default"" folder).  Other rooms.md files around it will also be examined." _
-    & vbCrLf & "This will allow us to lookup matching starting and ending rooms and populate those fields.", vbInformation
+    On Error GoTo error:
+    Dim sText As String, sNewText As String, x As Long, y As Long, nSteps As Long
+    Dim sFile As String, fso As FileSystemObject, oTS As TextStream, oFile As File, oFolder As Folder
+    Dim sLine As String, sArr() As String, oSubFolder As Folder, oSubFolder2 As Folder
+    Dim sFileHeader(3) As String, sNeededItem As String, sPathSteps() As String
+    Dim sStartingRoomChecksum As String, sEndingRoomChecksum As String
+    Dim sStartRoomName As String, sEndRoomName As String
+    Dim sStartRoomCode As String, sEndRoomCode As String
     
-Set fso = CreateObject("Scripting.FileSystemObject")
-
-oComDag.Filter = "Rooms.md file (Rooms.md)|Rooms.md"
-oComDag.DialogTitle = "Select MegaMUD Rooms.md File"
-oComDag.FileName = "Rooms.md"
-
-If fso.FolderExists(ReadINI("Settings", "Last_MegaMUD_DBFolder", , "C:\Program Files (x86)\Megamud\Default")) Then
-    oComDag.InitDir = ReadINI("Settings", "Last_MegaMUD_DBFolder")
-ElseIf fso.FileExists("C:\Program Files (x86)\Megamud\Default\Rooms.md") Then
-    oComDag.InitDir = "C:\Program Files (x86)\Megamud\Default"
-ElseIf fso.FileExists("C:\Megamud\Default\Rooms.md") Then
-    oComDag.InitDir = "C:\Megamud\Default"
-'ElseIf fso.FileExists(Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default\Rooms.md") Then
-'    oComDag.InitDir = Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default"
-Else
-    oComDag.InitDir = App.Path
-End If
-
-On Error GoTo canceled:
-oComDag.ShowOpen
-If oComDag.FileName = "" Then GoTo canceled:
-
+    txtMapMove.Text = Replace(txtMapMove.Text, vbCrLf & vbCrLf, vbCrLf)
+    
+    sText = txtMapMove.Text
+    If Len(sText) < 1 Then
+        MsgBox "No text to copy.", vbInformation
+        Exit Sub
+    End If
+    
+    'sText = "[LOOP NAME][AUTHOR]" & vbCrLf _
+        & "[CODE:FROM ROOM GROUP:FROM ROOM NAME]" & vbCrLf _
+        & "[CODE:TO ROOM GROUP:TO ROOM NAME]" & vbCrLf _
+        & "START ROOM CHECKSUM:END ROOM CHECKSUM:" & nSteps & ":-1:0:Needed Items:Path fails:when finished"
+    
+    sPathSteps() = Split(txtMapMove.Text, vbCrLf)
+    If Not IsDimmed(sPathSteps) Then GoTo out:
+    
+    nSteps = UBound(sPathSteps()) + 1
+    
+    If Len(sPathSteps(0)) > 2 And Left(sPathSteps(0), 1) = ":" And Right(sPathSteps(0), 1) = ":" Then
+        sNeededItem = Replace(sPathSteps(0), ":", "")
+        sPathSteps(0) = ""
+        nSteps = nSteps - 1
+    End If
+    
+    sStartRoomName = GetRoomName("", nLocalMapStartMap, nLocalMapStartRoom, True)
+    sStartingRoomChecksum = Get_MegaMUD_RoomHash(sStartRoomName) & Get_MegaMUD_ExitsCode(nLocalMapStartMap, nLocalMapStartRoom)
+    sStartRoomCode = Get_MegaMUD_RoomHash(sStartRoomName) & "9"
+    
+    sEndRoomName = GetRoomName("", nLastMapRecorded, nLastRoomRecorded, True)
+    sEndingRoomChecksum = Get_MegaMUD_RoomHash(sEndRoomName) & Get_MegaMUD_ExitsCode(nLastMapRecorded, nLastRoomRecorded)
+    sEndRoomCode = Get_MegaMUD_RoomHash(sEndRoomName) & "9"
+    
+    sFileHeader(0) = "[][]"
+    'sFileHeader(1) = "[FFFF:Custom Paths:" & sStartRoomName
+    'sFileHeader(2) = "[FFFF:Custom Paths:" & sEndRoomName
+    sFileHeader(3) = sStartingRoomChecksum & ":" & sEndingRoomChecksum & ":" & nSteps & ":-1:0:" & sNeededItem & "::"
+    
+    MsgBox "On the next screen you will be asked to select the MegaMUD rooms.md database file. " _
+        & "Choose the MAIN rooms.md file (the one under the ""Default"" folder).  Other rooms.md files around it will also be examined." _
+        & vbCrLf & "This will allow us to lookup matching starting and ending rooms and populate those fields.", vbInformation
+        
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    
+    oComDag.Filter = "Rooms.md file (Rooms.md)|Rooms.md"
+    oComDag.DialogTitle = "Select MegaMUD Rooms.md File"
+    oComDag.FileName = "Rooms.md"
+    
+    If fso.FolderExists(ReadINI("Settings", "Last_MegaMUD_DBFolder", , "C:\Program Files (x86)\Megamud\Default")) Then
+        oComDag.InitDir = ReadINI("Settings", "Last_MegaMUD_DBFolder")
+    ElseIf fso.FileExists("C:\Program Files (x86)\Megamud\Default\Rooms.md") Then
+        oComDag.InitDir = "C:\Program Files (x86)\Megamud\Default"
+    ElseIf fso.FileExists("C:\Megamud\Default\Rooms.md") Then
+        oComDag.InitDir = "C:\Megamud\Default"
+    ElseIf fso.FileExists(Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default\Rooms.md") Then
+        oComDag.InitDir = Environ("USERPROFILE") & "\AppData\Local\VirtualStore\Program Files (x86)\Megamud\Default"
+    Else
+        oComDag.InitDir = App.Path
+    End If
+    
+    On Error GoTo canceled:
+    oComDag.ShowOpen
+    If oComDag.FileName = "" Then GoTo canceled:
+    
 continue1:
-On Error GoTo error:
-
-sFile = oComDag.FileName
-If Not UCase(Right(sFile, 3)) = ".MD" Then sFile = sFile & ".MD"
-
-If Not fso.FileExists(sFile) Then
-    X = MsgBox("File not found or file open canceled, continue anyway?", vbYesNo + vbQuestion)
-    If Not X = vbYes Then GoTo out:
-    GoTo skip_room_lookup:
-End If
-
-Set oFile = fso.GetFile(sFile)
-Call WriteINI("Settings", "Last_MegaMUD_DBFolder", oFile.ParentFolder)
-Set oFile = Nothing
-
-Set oTS = fso.OpenTextFile(sFile, ForReading)
-Call ScanRoomsDatabase(oTS, sFileHeader(), sStartRoomCode, sEndRoomCode, sStartingRoomChecksum, sEndingRoomChecksum)
-oTS.Close
-Set oTS = Nothing
-
-If sFileHeader(1) = "" Or sFileHeader(2) = "" Then
+    On Error GoTo error:
+    
+    sFile = oComDag.FileName
+    If Not UCase(Right(sFile, 3)) = ".MD" Then sFile = sFile & ".MD"
+    
+    If Not fso.FileExists(sFile) Then
+        x = MsgBox("File not found or file open canceled, continue anyway?", vbYesNo + vbQuestion)
+        If Not x = vbYes Then GoTo out:
+        GoTo skip_room_lookup:
+    End If
+    
     Set oFile = fso.GetFile(sFile)
-    Set oFolder = oFile.ParentFolder
-    Set oFolder = oFolder.ParentFolder
-    If oFolder.SubFolders.Count > 0 Then
-        For Each oSubFolder In oFolder.SubFolders
-            If fso.FileExists(oSubFolder.Path & "\rooms.md") Then
-                Set oTS = fso.OpenTextFile(oSubFolder.Path & "\rooms.md", ForReading)
-                Call ScanRoomsDatabase(oTS, sFileHeader(), sStartRoomCode, sEndRoomCode, sStartingRoomChecksum, sEndingRoomChecksum)
-                oTS.Close
-                Set oTS = Nothing
-                If Not sFileHeader(1) = "" And Not sFileHeader(2) = "" Then GoTo skip_room_lookup
-            End If
-            
-            If oSubFolder.SubFolders.Count > 0 Then
-                
-                If oSubFolder.SubFolders.Count > 0 Then
-                    For Each oSubFolder2 In oSubFolder.SubFolders
-                        If fso.FileExists(oSubFolder2.Path & "\rooms.md") Then
-                            Set oTS = fso.OpenTextFile(oSubFolder2.Path & "\rooms.md", ForReading)
-                            Call ScanRoomsDatabase(oTS, sFileHeader(), sStartRoomCode, sEndRoomCode, sStartingRoomChecksum, sEndingRoomChecksum)
-                            oTS.Close
-                            Set oTS = Nothing
-                            If Not sFileHeader(1) = "" And Not sFileHeader(2) = "" Then GoTo skip_room_lookup
-                        End If
-                    Next oSubFolder2
+    Call WriteINI("Settings", "Last_MegaMUD_DBFolder", oFile.ParentFolder)
+    Set oFile = Nothing
+    
+    Set oTS = fso.OpenTextFile(sFile, ForReading)
+    Call ScanRoomsDatabase(oTS, sFileHeader(), sStartRoomCode, sEndRoomCode, sStartingRoomChecksum, sEndingRoomChecksum)
+    oTS.Close
+    Set oTS = Nothing
+    
+    If sFileHeader(1) = "" Or sFileHeader(2) = "" Then
+        Set oFile = fso.GetFile(sFile)
+        Set oFolder = oFile.ParentFolder
+        Set oFolder = oFolder.ParentFolder
+        If oFolder.SubFolders.Count > 0 Then
+            For Each oSubFolder In oFolder.SubFolders
+                If fso.FileExists(oSubFolder.Path & "\rooms.md") Then
+                    Set oTS = fso.OpenTextFile(oSubFolder.Path & "\rooms.md", ForReading)
+                    Call ScanRoomsDatabase(oTS, sFileHeader(), sStartRoomCode, sEndRoomCode, sStartingRoomChecksum, sEndingRoomChecksum)
+                    oTS.Close
+                    Set oTS = Nothing
+                    If Not sFileHeader(1) = "" And Not sFileHeader(2) = "" Then GoTo skip_room_lookup
                 End If
                 
-            End If
-        Next oSubFolder
+                If oSubFolder.SubFolders.Count > 0 Then
+                    
+                    If oSubFolder.SubFolders.Count > 0 Then
+                        For Each oSubFolder2 In oSubFolder.SubFolders
+                            If fso.FileExists(oSubFolder2.Path & "\rooms.md") Then
+                                Set oTS = fso.OpenTextFile(oSubFolder2.Path & "\rooms.md", ForReading)
+                                Call ScanRoomsDatabase(oTS, sFileHeader(), sStartRoomCode, sEndRoomCode, sStartingRoomChecksum, sEndingRoomChecksum)
+                                oTS.Close
+                                Set oTS = Nothing
+                                If Not sFileHeader(1) = "" And Not sFileHeader(2) = "" Then GoTo skip_room_lookup
+                            End If
+                        Next oSubFolder2
+                    End If
+                    
+                End If
+            Next oSubFolder
+        End If
     End If
-End If
-
+    
 skip_room_lookup:
-If Not sFileHeader(1) = "" And Not sFileHeader(2) = "" Then
-    MsgBox "Starting and ending rooms matched to existing MegaMUD rooms!" & vbCrLf _
-        & "Start: " & sFileHeader(1) & vbCrLf _
-        & "End: " & sFileHeader(2), vbInformation
-End If
-
-If sFileHeader(1) = "" Then
-   '[FFFF:Custom Paths:" & sStartRoomName
-   sText = InputBox("START room code / group not found for " & vbCrLf & sStartRoomName & vbCrLf & vbCrLf & "Enter 4 character megamud room code to use (must be unique if new to avoid conflict).", , "FFFF")
-   If sText = "" Then GoTo out:
-   sFileHeader(1) = "[" & sText & ":"
-   
-   sText = InputBox("START room code / group not found for " & vbCrLf & sStartRoomName & vbCrLf & vbCrLf & "Enter group associated with the room.", , "Custom Rooms")
-   If sText = "" Then GoTo out:
-   sFileHeader(1) = sFileHeader(1) & sText & ":" & sStartRoomName & "]"
-End If
-
-If sFileHeader(2) = "" And Not sStartingRoomChecksum = sEndingRoomChecksum Then
-   '[FFFF:Custom Paths:" & sEndRoomName
-   sText = InputBox("END room code / group not found for " & vbCrLf & sEndRoomName & vbCrLf & vbCrLf & "Enter 4 character megamud room code to use (must be unique if new to avoid conflict).", , "FFFF")
-   If sText = "" Then GoTo out:
-   sFileHeader(2) = "[" & sText & ":"
-   
-   sText = InputBox("END room code / group not found for " & vbCrLf & sEndRoomName & vbCrLf & vbCrLf & "Enter group associated with the room.", , "Custom Rooms")
-   If sText = "" Then GoTo out:
-   sFileHeader(2) = sFileHeader(2) & sText & ":" & sEndRoomName & "]"
-End If
-
-If sStartingRoomChecksum = sEndingRoomChecksum Then
-    sText = InputBox("This appears to be a loop.  Enter the name of the loop:")
-    If sText = "" Then GoTo out:
-    sFileHeader(0) = "[" & sText & "]"
-    sFileHeader(2) = ""
-Else
-    sFileHeader(0) = "[]"
-End If
-
-sText = InputBox("Enter Author", , ReadINI("Settings", "MegaMUD_Path_Author", , "Custom"))
-If sText = "" Then GoTo out:
-Call WriteINI("Settings", "MegaMUD_Path_Author", sText)
-sFileHeader(0) = sFileHeader(0) & "[" & sText & "]"
-
-sText = ""
-For X = 0 To 3
-    If Not Trim(sFileHeader(X)) = "" Then
-        sText = sText & sFileHeader(X) & vbCrLf
+    If Not sFileHeader(1) = "" And Not sFileHeader(2) = "" Then
+        MsgBox "Starting and ending rooms matched to existing MegaMUD rooms!" & vbCrLf _
+            & "Start: " & sFileHeader(1) & vbCrLf _
+            & "End: " & sFileHeader(2), vbInformation
     End If
-Next X
-For X = 0 To UBound(sPathSteps())
-    If Not Trim(sPathSteps(X)) = "" Then
-        sText = sText & sPathSteps(X) & vbCrLf
+    
+    If sFileHeader(1) = "" Then
+       '[FFFF:Custom Paths:" & sStartRoomName
+       sText = InputBox("START room code / group not found for " & vbCrLf & sStartRoomName & vbCrLf & vbCrLf & "Enter 4 character megamud room code to use (must be unique if new to avoid conflict).", , "FFFF")
+       If sText = "" Then GoTo out:
+       sFileHeader(1) = "[" & sText & ":"
+       
+       sText = InputBox("START room code / group not found for " & vbCrLf & sStartRoomName & vbCrLf & vbCrLf & "Enter group associated with the room.", , "Custom Rooms")
+       If sText = "" Then GoTo out:
+       sFileHeader(1) = sFileHeader(1) & sText & ":" & sStartRoomName & "]"
     End If
-Next X
-
-MsgBox "We are ready to save the path. It is recommended to save the file *outside* of your megamud install " _
-    & "(such as your desktop) and then utilize the Add path feature from the" & vbCrLf _
-    & "Options -> Game Data -> Paths -> ""Add..."" button. " & vbCrLf _
-    & "Any new rooms included in the path will automatically be added by megamud.", vbInformation
-
-oComDag.Filter = "MegaMUD .MP (*.mp)|*.mp"
-oComDag.DialogTitle = "Save MegaMUD Path"
-If sStartingRoomChecksum = sEndingRoomChecksum Then
-    oComDag.FileName = sStartRoomCode & "LOOP.mp"
-Else
-    oComDag.FileName = sStartRoomCode & sEndRoomCode & ".mp"
-End If
-oComDag.InitDir = ReadINI("Settings", "LastMegaPathDir", , Environ("USERPROFILE") & "\Desktop")
-
-saveagain:
-On Error GoTo out:
-oComDag.ShowSave
-If oComDag.FileName = "" Then GoTo out:
-
-If fso.FileExists(oComDag.FileName) Then
-    X = MsgBox("File Exists, Overwrite?", vbQuestion + vbYesNoCancel + vbDefaultButton2)
-    If X = vbCancel Then
-        GoTo out:
-    ElseIf X = vbYes Then
-        Call fso.DeleteFile(oComDag.FileName, True)
+    
+    If sFileHeader(2) = "" And Not sStartingRoomChecksum = sEndingRoomChecksum Then
+       '[FFFF:Custom Paths:" & sEndRoomName
+       sText = InputBox("END room code / group not found for " & vbCrLf & sEndRoomName & vbCrLf & vbCrLf & "Enter 4 character megamud room code to use (must be unique if new to avoid conflict).", , "FFFF")
+       If sText = "" Then GoTo out:
+       sFileHeader(2) = "[" & sText & ":"
+       
+       sText = InputBox("END room code / group not found for " & vbCrLf & sEndRoomName & vbCrLf & vbCrLf & "Enter group associated with the room.", , "Custom Rooms")
+       If sText = "" Then GoTo out:
+       sFileHeader(2) = sFileHeader(2) & sText & ":" & sEndRoomName & "]"
+    End If
+    
+    If sStartingRoomChecksum = sEndingRoomChecksum Then
+        sText = InputBox("This appears to be a loop.  Enter the name of the loop:")
+        If sText = "" Then GoTo out:
+        sFileHeader(0) = "[" & sText & "]"
+        sFileHeader(2) = ""
     Else
-        GoTo saveagain:
+        sFileHeader(0) = "[]"
     End If
-End If
-
-Set oTS = fso.OpenTextFile(oComDag.FileName, ForWriting, True)
-oTS.Write sText
-oTS.Close
-Set oTS = Nothing
-
-Set oFile = fso.GetFile(oComDag.FileName)
-Call WriteINI("Settings", "LastMegaPathDir", oFile.ParentFolder)
-
+    
+    sText = InputBox("Enter Author", , ReadINI("Settings", "MegaMUD_Path_Author", , "Custom"))
+    If sText = "" Then GoTo out:
+    Call WriteINI("Settings", "MegaMUD_Path_Author", sText)
+    sFileHeader(0) = sFileHeader(0) & "[" & sText & "]"
+    
+    sText = ""
+    For x = 0 To 3
+        If Not Trim(sFileHeader(x)) = "" Then
+            sText = sText & sFileHeader(x) & vbCrLf
+        End If
+    Next x
+    For x = 0 To UBound(sPathSteps())
+        If Not Trim(sPathSteps(x)) = "" Then
+            sText = sText & sPathSteps(x) & vbCrLf
+        End If
+    Next x
+    
+    MsgBox "We are ready to save the path. It is recommended to save the file *outside* of your megamud install " _
+        & "(such as your desktop) and then utilize the Add path feature from the" & vbCrLf _
+        & "Options -> Game Data -> Paths -> ""Add..."" button. " & vbCrLf _
+        & "Any new rooms included in the path will automatically be added by megamud.", vbInformation
+    
+    oComDag.Filter = "MegaMUD .MP (*.mp)|*.mp"
+    oComDag.DialogTitle = "Save MegaMUD Path"
+    If sStartingRoomChecksum = sEndingRoomChecksum Then
+        oComDag.FileName = sStartRoomCode & "LOOP.mp"
+    Else
+        oComDag.FileName = sStartRoomCode & sEndRoomCode & ".mp"
+    End If
+    oComDag.InitDir = ReadINI("Settings", "LastMegaPathDir", , Environ("USERPROFILE") & "\Desktop")
+    
+saveagain:
+    On Error GoTo out:
+    oComDag.ShowSave
+    If oComDag.FileName = "" Then GoTo out:
+    
+    If fso.FileExists(oComDag.FileName) Then
+        x = MsgBox("File Exists, Overwrite?", vbQuestion + vbYesNoCancel + vbDefaultButton2)
+        If x = vbCancel Then
+            GoTo out:
+        ElseIf x = vbYes Then
+            Call fso.DeleteFile(oComDag.FileName, True)
+        Else
+            GoTo saveagain:
+        End If
+    End If
+    
+    Set oTS = fso.OpenTextFile(oComDag.FileName, ForWriting, True)
+    oTS.Write sText
+    oTS.Close
+    Set oTS = Nothing
+    
+    Set oFile = fso.GetFile(oComDag.FileName)
+    Call WriteINI("Settings", "LastMegaPathDir", oFile.ParentFolder)
+    
 out:
-On Error Resume Next
-Set fso = Nothing
-Set oTS = Nothing
-Set oFile = Nothing
-Exit Sub
-
+    On Error Resume Next
+    Set fso = Nothing
+    Set oTS = Nothing
+    Set oFile = Nothing
+    Exit Sub
+    
 canceled:
-Resume continue1:
-
-Exit Sub
+    Resume continue1:
+    
+    Exit Sub
 error:
-Call HandleError("cmdMapAddMegaCodes_Click")
-Resume out:
+    Call HandleError("cmdMapAddMegaCodes_Click")
+    Resume out:
 End Sub
 
 Private Sub ScanRoomsDatabase(ByRef oTS, ByRef sFileHeader() As String, ByRef sStartRoomCode As String, ByRef sEndRoomCode As String, _
     ByRef sStartingRoomChecksum As String, ByRef sEndingRoomChecksum As String)
-Dim sLine As String, sArr() As String
-
-Do While oTS.AtEndOfStream = False
-    '0        1        2 3 4 5    6            7
-    'CAB00180:00004040:0:0:0:AALY:Ancient Ruin:Ancient Ruin Dark Alley
-    sLine = oTS.ReadLine
-    sArr() = Split(sLine, ":")
-    If UBound(sArr()) >= 7 Then
-        If sArr(0) = sStartingRoomChecksum And sFileHeader(1) = "" Then
-            '[CODE:FROM ROOM GROUP:FROM ROOM NAME]
-            sFileHeader(1) = "[" & sArr(5) & ":" & sArr(6) & ":" & sArr(7) & "]"
-            sStartRoomCode = sArr(5)
+    Dim sLine As String, sArr() As String
+    
+    Do While oTS.AtEndOfStream = False
+        '0        1        2 3 4 5    6            7
+        'CAB00180:00004040:0:0:0:AALY:Ancient Ruin:Ancient Ruin Dark Alley
+        sLine = oTS.ReadLine
+        sArr() = Split(sLine, ":")
+        If UBound(sArr()) >= 7 Then
+            If sArr(0) = sStartingRoomChecksum And sFileHeader(1) = "" Then
+                '[CODE:FROM ROOM GROUP:FROM ROOM NAME]
+                sFileHeader(1) = "[" & sArr(5) & ":" & sArr(6) & ":" & sArr(7) & "]"
+                sStartRoomCode = sArr(5)
+            End If
+            If sArr(0) = sEndingRoomChecksum And sFileHeader(2) = "" Then
+                '[CODE:TO ROOM GROUP:TO ROOM NAME]
+                sFileHeader(2) = "[" & sArr(5) & ":" & sArr(6) & ":" & sArr(7) & "]"
+                sEndRoomCode = sArr(5)
+            End If
         End If
-        If sArr(0) = sEndingRoomChecksum And sFileHeader(2) = "" Then
-            '[CODE:TO ROOM GROUP:TO ROOM NAME]
-            sFileHeader(2) = "[" & sArr(5) & ":" & sArr(6) & ":" & sArr(7) & "]"
-            sEndRoomCode = sArr(5)
-        End If
-    End If
-Loop
+    Loop
 
 End Sub
 
@@ -882,7 +882,7 @@ End If
 End Sub
 
 Private Sub cmdMove_Click(Index As Integer)
-Dim X As Integer
+Dim x As Integer
 On Error GoTo error:
 
 Select Case Index
@@ -899,15 +899,15 @@ Select Case Index
 End Select
 
 If Index = 10 Then
-    For X = 0 To 10
-        cmdMove(X).Visible = False
-    Next X
+    For x = 0 To 10
+        cmdMove(x).Visible = False
+    Next x
     cmdMove(11).Visible = True
 ElseIf Index = 11 Then
     cmdMove(11).Visible = False
-    For X = 0 To 10
-        cmdMove(X).Visible = True
-    Next X
+    For x = 0 To 10
+        cmdMove(x).Visible = True
+    Next x
 End If
 
 out:
@@ -920,11 +920,11 @@ End Sub
 
 Private Sub cmdResetCurrent_Click()
 On Error GoTo error:
-Dim X As Integer
+Dim x As Integer
 
 If Len(Trim(txtMapMove.Text)) > 0 Then
-    X = MsgBox("Are you sure?", vbQuestion + vbYesNo)
-    If Not X = vbYes Then Exit Sub
+    x = MsgBox("Are you sure?", vbQuestion + vbYesNo)
+    If Not x = vbYes Then Exit Sub
 End If
 
 Call SetCurrentPosition(frmMain.nMapStartMap, frmMain.nMapStartRoom)
@@ -939,11 +939,11 @@ End Sub
 
 Private Sub cmdResetStart_Click()
 On Error GoTo error:
-Dim X As Integer
+Dim x As Integer
 
 If Len(Trim(txtMapMove.Text)) > 0 Then
-    X = MsgBox("Are you sure?  If you have steps in the path the preceed this room then when you add the megamud codes later the wrong starting room codes will be entered.", vbQuestion + vbYesNo)
-    If Not X = vbYes Then Exit Sub
+    x = MsgBox("Are you sure?  If you have steps in the path the preceed this room then when you add the megamud codes later the wrong starting room codes will be entered.", vbQuestion + vbYesNo)
+    If Not x = vbYes Then Exit Sub
 End If
 Call ResetStartingRoom
 
@@ -960,7 +960,7 @@ MsgBox "Note: This simply removes the last line in the box and sets the current 
 End Sub
 
 Private Sub cmdUndoStep_Click()
-Dim sArr() As String, sText As String, X As Integer, nRoom As RoomExitType
+Dim sArr() As String, sText As String, x As Integer, nRoom As RoomExitType
 On Error GoTo error:
 
 If Right(txtMapMove.Text, 2) = vbCrLf Then txtMapMove.Text = Left(txtMapMove.Text, Len(txtMapMove.Text) - 2)
@@ -969,9 +969,9 @@ If Not Trim(txtMapMove.Text) = "" Then
     txtMapMove.Text = Replace(Trim(txtMapMove.Text), vbCrLf & vbCrLf, vbCrLf)
     sArr() = Split(txtMapMove.Text, vbCrLf)
     If IsDimmed(sArr()) Then
-        For X = 0 To UBound(sArr()) - 1
-            sText = sText & sArr(X) & vbCrLf
-        Next X
+        For x = 0 To UBound(sArr()) - 1
+            sText = sText & sArr(x) & vbCrLf
+        Next x
         If Len(sText) > 1 Then sText = Left(sText, Len(sText) - 2)
         txtMapMove.Text = sText
         
@@ -1074,7 +1074,7 @@ Resume out:
 End Sub
 
 Private Sub txtMapMove_KeyPress(KeyAscii As Integer)
-Dim sLook As String, RoomExit As RoomExitType, X As Integer
+Dim sLook As String, RoomExit As RoomExitType, x As Integer
 Dim nExitType As Integer, nRecNum As Long, sRoomName As String
 Dim nTest As Integer, sActions(9) As String, sTemp As String
 Dim sCurrentRoomMegaMudCode As String, nRoomFlags As Long, sRoomFlags As String
@@ -1228,16 +1228,16 @@ Select Case nExitType
         If InStr(1, LCase(RoomExit.ExitType), "action") > 0 Then
             nTest = ExtractValueFromString(RoomExit.ExitType, "needs ")
             If nTest > 0 Then
-                For X = 1 To nTest
-                    sActions(X) = InputBox("Enter action # " & X & vbCrLf & vbCrLf _
+                For x = 1 To nTest
+                    sActions(x) = InputBox("Enter action # " & x & vbCrLf & vbCrLf _
                         & "If the action is not entered in this room, type a zero (0)." & vbCrLf _
                         & "To cancel the move and look up the command press cancel.")
-                    If sActions(X) = "" Then GoTo out:
-                    If sActions(X) = "0" Then
-                        sActions(X) = ""
+                    If sActions(x) = "" Then GoTo out:
+                    If sActions(x) = "0" Then
+                        sActions(x) = ""
                         GoTo cont
                     End If
-                Next X
+                Next x
 cont:
             Else
                 sLook = sLook & " -- " & RoomExit.ExitType
@@ -1266,12 +1266,12 @@ If Len(sRoomFlags) < 4 Then sRoomFlags = String(4 - Len(sRoomFlags), "0") & sRoo
 txtMapMove.Text = txtMapMove.Text & ":" & sRoomFlags & ":" & sLook
 If Len(sActions(1)) > 0 Then
     txtMapMove.Text = txtMapMove.Text & "["
-    For X = 1 To 9
-        If Len(sActions(X)) > 0 Then
-            If X > 1 Then txtMapMove.Text = txtMapMove.Text & ","
-            txtMapMove.Text = txtMapMove.Text & sActions(X)
+    For x = 1 To 9
+        If Len(sActions(x)) > 0 Then
+            If x > 1 Then txtMapMove.Text = txtMapMove.Text & ","
+            txtMapMove.Text = txtMapMove.Text & sActions(x)
         End If
-    Next X
+    Next x
     txtMapMove.Text = txtMapMove.Text & "]"
 End If
 

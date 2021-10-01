@@ -11,7 +11,7 @@ End Type
 Public Function GetAbilityStats(ByVal nNum As Integer, Optional ByVal nValue As Integer, _
     Optional ByRef LV As ListView, Optional ByVal bCalcSpellLevel As Boolean = True, _
     Optional ByVal bPercentColumn As Boolean) As String
-Dim sHeader As String, oLI As ListItem, sTemp As String, sArr() As String, X As Integer
+Dim sHeader As String, oLI As ListItem, sTemp As String, sArr() As String, x As Integer
 Dim sTextblockCasts As String
 On Error GoTo error:
 
@@ -25,15 +25,15 @@ If nNum = 148 And nValue > 0 Then
         GoTo skip_textblock_spells_only:
     Else
         sArr() = Split(sTemp, ":")
-        For X = 0 To UBound(sArr())
-            If Left(sArr(X), 5) = "cast " Then
-                sTemp = PullSpellEQ(False, , (Val(Mid(sArr(X), 6))))
+        For x = 0 To UBound(sArr())
+            If Left(sArr(x), 5) = "cast " Then
+                sTemp = PullSpellEQ(False, , (Val(Mid(sArr(x), 6))))
                 If Not sTextblockCasts = "" Then sTextblockCasts = sTextblockCasts & ", "
                 sTextblockCasts = sTextblockCasts & sTemp
             Else
                 GoTo skip_textblock_spells_only:
             End If
-        Next X
+        Next x
     End If
 End If
 If Not sTextblockCasts = "" Then
@@ -99,21 +99,21 @@ End Function
 
 Public Function ExtractTextCommand(ByVal sWholeString As String) As String
 On Error GoTo error:
-Dim X As Long, sCommand As String, sChar As String
+Dim x As Long, sCommand As String, sChar As String
 
-X = InStr(1, sWholeString, " ") + 1
-If X = 1 Then
+x = InStr(1, sWholeString, " ") + 1
+If x = 1 Then
     ExtractTextCommand = sWholeString
     Exit Function
 End If
 
-Do While X < Len(sWholeString)
-    sChar = Mid(sWholeString, X, 1)
+Do While x < Len(sWholeString)
+    sChar = Mid(sWholeString, x, 1)
     If sChar = "," Then
         If Not sCommand = "" Then Exit Do
     End If
     sCommand = sCommand & sChar
-    X = X + 1
+    x = x + 1
 Loop
 
 If sCommand = "" Then
@@ -131,7 +131,7 @@ ExtractTextCommand = sWholeString
 End Function
 
 Public Function ExtractMapRoom(ByVal sExit As String) As RoomExitType
-    Dim X As Integer, Y As Integer, i As Integer
+    Dim x As Integer, y As Integer, i As Integer
     
     On Error GoTo error:
     
@@ -139,15 +139,15 @@ Public Function ExtractMapRoom(ByVal sExit As String) As RoomExitType
     ExtractMapRoom.Room = 0
     ExtractMapRoom.ExitType = 0
     
-    X = InStr(1, sExit, "/")
-    Do While X - 1 > 0 'gets where the map number starts
-        Select Case Mid(sExit, X - 1, 1)
+    x = InStr(1, sExit, "/")
+    Do While x - 1 > 0 'gets where the map number starts
+        Select Case Mid(sExit, x - 1, 1)
             Case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0":
-                i = X - 1
+                i = x - 1
             Case Else:
                 Exit Do
         End Select
-        X = X - 1
+        x = x - 1
     Loop
     
     'For i = 1 To Len(sExit) - 1 'gets where the first number is
@@ -156,18 +156,18 @@ Public Function ExtractMapRoom(ByVal sExit As String) As RoomExitType
     '    End Select
     'Next
     
-    X = InStr(1, sExit, "/")
-    If X = 0 Then Exit Function
-    If X = Len(sExit) Then Exit Function
+    x = InStr(1, sExit, "/")
+    If x = 0 Then Exit Function
+    If x = Len(sExit) Then Exit Function
     
-    ExtractMapRoom.Map = Val(Mid(sExit, i, X - 1))
+    ExtractMapRoom.Map = Val(Mid(sExit, i, x - 1))
     
-    Y = InStr(X, sExit, " ")
-    If Y = 0 Then
-        ExtractMapRoom.Room = Val(Mid(sExit, X + 1))
+    y = InStr(x, sExit, " ")
+    If y = 0 Then
+        ExtractMapRoom.Room = Val(Mid(sExit, x + 1))
     Else
-        ExtractMapRoom.Room = Val(Mid(sExit, X + 1, Y - 1))
-        ExtractMapRoom.ExitType = Mid(sExit, Y + 1)
+        ExtractMapRoom.Room = Val(Mid(sExit, x + 1, y - 1))
+        ExtractMapRoom.ExitType = Mid(sExit, y + 1)
     End If
     
     Exit Function
@@ -653,17 +653,17 @@ End Function
 
 Public Function GetAbilityList() As Variant()
 On Error GoTo error:
-Dim sArr() As Variant, X As Integer
+Dim sArr() As Variant, x As Integer
 
 ReDim sArr(200)
-For X = 1 To 200
-    sArr(X) = GetAbilityName(X, True)
-    If sArr(X) = "" Or sArr(X) = "Ability " & X Then
-        sArr(X) = "[Ability " & X & "]"
+For x = 1 To 200
+    sArr(x) = GetAbilityName(x, True)
+    If sArr(x) = "" Or sArr(x) = "Ability " & x Then
+        sArr(x) = "[Ability " & x & "]"
     ElseIf Not bHideRecordNumbers Then
-        sArr(X) = sArr(X) & " (" & X & ")"
+        sArr(x) = sArr(x) & " (" & x & ")"
     End If
-Next X
+Next x
 
 out:
 On Error Resume Next
@@ -1152,7 +1152,7 @@ Call HandleError("CalcSpellCasting")
 End Function
 
 Public Function GetEncumPercents(ByVal nTotalEncum As Long) As String
-Dim X As Double
+Dim x As Double
 On Error GoTo error:
 '& "/" & nTotalEncum
 If Not nTotalEncum = 0 Then
@@ -1162,9 +1162,9 @@ If Not nTotalEncum = 0 Then
     
     GetEncumPercents = GetEncumPercents & vbCrLf
     
-    For X = 0.1 To 0.9 Step 0.1
-        GetEncumPercents = GetEncumPercents & vbCrLf & (X * 100) & "% @ " & Fix(nTotalEncum * X) + 1 '& "/" & nTotalEncum
-    Next X
+    For x = 0.1 To 0.9 Step 0.1
+        GetEncumPercents = GetEncumPercents & vbCrLf & (x * 100) & "% @ " & Fix(nTotalEncum * x) + 1 '& "/" & nTotalEncum
+    Next x
 Else
     GetEncumPercents = ""
 End If

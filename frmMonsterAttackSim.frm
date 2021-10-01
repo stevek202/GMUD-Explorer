@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMonsterAttackSim 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Monster Attack Simulator"
@@ -1589,7 +1589,7 @@ If cmbMonsterList.ListCount = 0 Then Exit Sub
 
 cmbMonsterList.ListIndex = 0
 Call AutoSizeDropDownWidth(cmbMonsterList)
-Call ExpandCombo(cmbMonsterList, HeightOnly, DoubleWidth, frmMonsterAttackSim.hWnd)
+Call ExpandCombo(cmbMonsterList, HeightOnly, DoubleWidth, frmMonsterAttackSim.hwnd)
 cmbMonsterList.SelLength = 0
 
 out:

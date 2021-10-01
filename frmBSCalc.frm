@@ -873,7 +873,7 @@ Loop
 If cmbWeapon.ListCount > 0 Then
     cmbWeapon.ListIndex = 0
     Call AutoSizeDropDownWidth(cmbWeapon)
-    Call ExpandCombo(cmbWeapon, HeightOnly, DoubleWidth, Frame2.hWnd)
+    Call ExpandCombo(cmbWeapon, HeightOnly, DoubleWidth, Frame2.hwnd)
     cmbWeapon.SelLength = 0
 End If
 

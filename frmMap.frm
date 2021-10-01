@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMap 
    BackColor       =   &H00404040&
    BorderStyle     =   1  'Fixed Single
@@ -33446,7 +33446,7 @@ End If
 End Sub
 
 Private Sub Form_Activate()
-If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hWnd, True)
+If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hwnd, True)
 End Sub
 
 Private Sub Form_Load()
@@ -33465,7 +33465,7 @@ With TTlbl
 End With
 
 If Not ReadINI("Settings", "MapExternalOnTop") = "1" Then
-    lR = SetTopMostWindow(Me.hWnd, True)
+    lR = SetTopMostWindow(Me.hwnd, True)
 Else
     chkMapOptions(6).Value = 1
 End If
@@ -33507,16 +33507,16 @@ Dim lR As Long
 
 If Index = 6 Then
     If chkMapOptions(6).Value = 1 Then
-        lR = SetTopMostWindow(Me.hWnd, False)
+        lR = SetTopMostWindow(Me.hwnd, False)
     Else
-        lR = SetTopMostWindow(Me.hWnd, True)
+        lR = SetTopMostWindow(Me.hwnd, True)
     End If
     If FormIsLoaded("frmResults") Then
         If frmResults.objFormOwner Is Me Then
             If chkMapOptions(6).Value = 1 Then
-                lR = SetTopMostWindow(frmResults.hWnd, False)
+                lR = SetTopMostWindow(frmResults.hwnd, False)
             Else
-                lR = SetTopMostWindow(frmResults.hWnd, True)
+                lR = SetTopMostWindow(frmResults.hwnd, True)
             End If
         End If
     End If
@@ -33734,7 +33734,7 @@ frmMain.Enabled = False
 
 bMapCancelFind = False
 
-If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hWnd, False)
+If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hwnd, False)
 
 Load frmProgressBar
 Call frmProgressBar.SetRange(tabRooms.RecordCount)
@@ -33772,7 +33772,7 @@ out:
 On Error Resume Next
 Unload frmProgressBar
 Me.Enabled = True
-If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hWnd, True)
+If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hwnd, True)
 frmMain.Enabled = True
 Me.SetFocus
 Exit Sub
@@ -33811,7 +33811,7 @@ Else
     frmMapLegend.Show vbModeless, Me
     Set frmMapLegend.objFormOwner = Me
     
-    If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hWnd, True)
+    If chkMapOptions(6).Value = 0 Then Call SetTopMostWindow(Me.hwnd, True)
     
     'Call SetOwner(frmMapLegend.hwnd, Me.hwnd)
 '    If chkMapOptions(6).Value = 1 Then
@@ -33959,7 +33959,7 @@ If Not nMapStartRoom = nStartRoom Then
 End If
 
 bMapStillMapping = True
-Call LockWindowUpdate(Me.hWnd)
+Call LockWindowUpdate(Me.hwnd)
 
 'picMap.Visible = False
 picMap.Cls
@@ -33972,7 +33972,7 @@ If Not nCenterCell = 0 Then nMapCenterCell = nCenterCell
 'If nMapCenterCell > sMapSECorner Then nMapCenterCell = 210
 
 For x = 1 To 2500
-    TTlbl.DelToolTip picMap.hWnd, 0
+    TTlbl.DelToolTip picMap.hwnd, 0
     lblRoomCell(x).BackColor = &HFFFFFF
     lblRoomCell(x).Visible = False
     lblRoomCell(x).Tag = 0
@@ -34087,7 +34087,7 @@ If tabRooms.NoMatch Then
     rc.Top = lblRoomCell(Cell).Top
     rc.Bottom = (lblRoomCell(Cell).Top + lblRoomCell(Cell).Height)
     rc.Right = (lblRoomCell(Cell).Left + lblRoomCell(Cell).Width)
-    TTlbl.SetToolTipItem picMap.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, ToolTipString, False
+    TTlbl.SetToolTipItem picMap.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, ToolTipString, False
     Exit Sub
 End If
 
@@ -34272,7 +34272,7 @@ If chkMapOptions(5).Value = 0 Then
     rc.Top = lblRoomCell(Cell).Top
     rc.Bottom = (lblRoomCell(Cell).Top + lblRoomCell(Cell).Height)
     rc.Right = (lblRoomCell(Cell).Left + lblRoomCell(Cell).Width)
-    TTlbl.SetToolTipItem picMap.hWnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, ToolTipString, False
+    TTlbl.SetToolTipItem picMap.hwnd, 0, rc.Left, rc.Top, rc.Right, rc.Bottom, ToolTipString, False
 End If
 
 UnchartedCells(Cell) = 2
