@@ -2078,7 +2078,7 @@ Public Sub AddMonster2LV(LV As ListView)
             End If
         End If
         
-        If tabMonsters.Fields("AttType-" & x) = 2 Then
+        If tabMonsters.Fields("AttType-" & x) = 2 And acc > 0 Then
             tabSpells.Index = "pkSpells"
             tabSpells.Seek "=", acc
     

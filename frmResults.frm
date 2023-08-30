@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{20D5284F-7B23-4F0A-B8B1-6C9D18B64F1C}#1.0#0"; "exlimiter.ocx"
 Begin VB.Form frmResults 
    Caption         =   "Results (click to jump)"
@@ -306,7 +306,7 @@ If tvwResults.Nodes.Count < 1 Then Exit Sub
 
 Me.MousePointer = vbHourglass
 DoEvents
-Call LockWindowUpdate(Me.hWnd)
+Call LockWindowUpdate(Me.hwnd)
 If Index = 1 Then bExpanded = True
 
 For x = 1 To tvwResults.Nodes.Count
@@ -515,7 +515,7 @@ nTreeMode = 1
 If Me.Visible Then
     Me.MousePointer = vbHourglass
     DoEvents
-    Call LockWindowUpdate(Me.hWnd)
+    Call LockWindowUpdate(Me.hwnd)
 End If
 tvwResults.Nodes.clear
 nLastNode = 0
@@ -803,7 +803,7 @@ End If
 If Me.Visible Then
     Me.MousePointer = vbHourglass
     DoEvents
-    Call LockWindowUpdate(Me.hWnd)
+    Call LockWindowUpdate(Me.hwnd)
 End If
 
 tvwResults.Nodes.clear
@@ -982,7 +982,7 @@ Do While nDataPos < Len(sTextblockData) 'loops through lines
     End If
     
     x2 = InStr(nDataPos, sTextblockData, Chr(10))
-    If x2 = 0 Then x2 = Len(sTextblockData)
+    If x2 = 0 Then x2 = Len(sTextblockData) + 1
     sLine = Mid(sTextblockData, nDataPos, x2 - nDataPos)
     
     If sLine = "" Then GoTo next_line:
@@ -1391,7 +1391,7 @@ If nLastNode < 1 Then Exit Sub
 
 Me.MousePointer = vbHourglass
 DoEvents
-Call LockWindowUpdate(Me.hWnd)
+Call LockWindowUpdate(Me.hwnd)
 
 If Index = 0 Then
     bExpanded = False
@@ -1521,7 +1521,7 @@ Select Case x
         If objFormOwner Is frmMap Then
             If frmMap.chkMapOptions(6).Value = 0 Then
                 If frmMap.chkMapOptions(8).Value = 1 Then
-                    Call SetTopMostWindow(frmMap.hWnd, False)
+                    Call SetTopMostWindow(frmMap.hwnd, False)
                     frmMain.SetFocus
                 End If
             End If
@@ -1534,7 +1534,7 @@ Select Case x
         If objFormOwner Is frmMap Then
             If frmMap.chkMapOptions(6).Value = 0 Then
                 If frmMap.chkMapOptions(8).Value = 1 Then
-                    Call SetTopMostWindow(frmMap.hWnd, False)
+                    Call SetTopMostWindow(frmMap.hwnd, False)
                     frmMain.SetFocus
                 End If
             End If
@@ -1598,7 +1598,7 @@ Else
         If objFormOwner Is frmMap Then
             If frmMap.chkMapOptions(6).Value = 0 Then
                 If frmMap.chkMapOptions(8).Value = 1 Then
-                    Call SetTopMostWindow(frmMap.hWnd, False)
+                    Call SetTopMostWindow(frmMap.hwnd, False)
                     frmMain.SetFocus
                 End If
             End If
